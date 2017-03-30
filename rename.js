@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 'use strict'
 console.log('Script is working');
-
+/**
+ * Include Commander from npm to better handle input.  Standing on the shoulders of giants and all that.
+ */
 const fs = require('fs');
 const path = require('path');
 const WORKINGDIR = process.cwd();
@@ -81,7 +83,7 @@ function rename(file, nmstring, fileNumber, extension) {
 /**
  * Used to validate the user input. Ensures the wildcard character is present. Script will fail to batch rename if wildcard is not present in the string.
  * @param {string} string
- * @returns {boolean}  
+ * @returns {boolean} True if the wildcard string is present in the input string. False if not.
  */
 function validateInput(input) {
     var input = input.includes(WILDCARD);
@@ -89,8 +91,9 @@ function validateInput(input) {
 }
 
 /**
- * 
+ * Function to ask questions of the user.
  * @param {string} question 
+ * @returns {Promise} The promise resolves to the supplied input from the user when prompted.
  */
 function ask(question) {
     let stdIn = process.stdin;
