@@ -28,7 +28,7 @@ var renameString = args[0];
         })
         .then(() => {
             readDir()
-                .then((files) => {
+                .then(function(files) {
                     for (let i = 0; i < files.length; i++) {
                         //exclude the script itself from the loop.  This could be done better.  It currently counts the script file itself if it exists in the working directory.  I should find a better way to do this.
                         if (files[i] === "rename.js") {
@@ -40,7 +40,7 @@ var renameString = args[0];
                     }
                     return;
                 })
-                .then(() => {
+                .then(function() {
                     console.log("Rename Done!");
                     process.exit();
                 })
@@ -51,10 +51,9 @@ var renameString = args[0];
  * Reads the directory where the script was executed and returns a promise that will resolve to an array of file names.
  * @returns {Promise} A promise that resolves to an array containing the directory contents.
  */
-
 function readDir() {
-    return new Promise((resolve, reject) => {
-        fs.readdir(WORKINGDIR, (err, files) => {
+    return new Promise(function(resolve, reject) {
+        fs.readdir(WORKINGDIR, function(err, files) {
             if (err) {
                 reject(err);
             }
@@ -63,6 +62,7 @@ function readDir() {
         })
     });
 }
+
 /**
  * Renames the file, keeping the extension of the file the same.  Adds wildcard for numbering files.
  * @param {string} file The file name to be changed.
@@ -73,7 +73,7 @@ function readDir() {
 function rename(file, nmstring, fileNumber, extension) {
     let newFileNameWithoutExt = nmstring.replace(/\!/gi, fileNumber);
     let newFileNameWithExt = newFileNameWithoutExt + extension;
-    fs.rename(file, newFileNameWithExt, (err) => {
+    fs.rename(file, newFileNameWithExt, function(err) {
         if (err) {
             console.log(err);
         }
@@ -98,7 +98,7 @@ function validateInput(input) {
 function ask(question) {
     let stdIn = process.stdin;
     let stdOut = process.stdout;
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
         stdIn.resume();
         stdOut.write(question + "\n");
         stdIn.once('data', (data) => {
