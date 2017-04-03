@@ -14,5 +14,8 @@
     "batch"
   ],
   "author": "Josh Denzau",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0"
+  }
 }

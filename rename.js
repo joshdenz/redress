@@ -6,10 +6,18 @@ console.log('Script is working');
  */
 const fs = require('fs');
 const path = require('path');
+const program = require('commander');
 const WORKINGDIR = process.cwd();
 const WILDCARD = "!";
 var args = process.argv.slice(2);
 var renameString = args[0];
+
+program
+    .version('0.0.1')
+    .option('-m, --mode <mode>', 'The script running mode.  Batch or single file.')
+    .option('-f, --filename <filename>', 'The desired file name including wildcard.  i.e. filename!')
+    .option('-t, --targetfile <target>', 'If in single file mode, this flag must be set with the target file for the rename operation.')
+    .parse(process.argv);
 
 (function () {
     if (!validateInput(renameString)) {
