@@ -11,7 +11,7 @@ const WORKINGDIR = process.cwd();
 const WILDCARD = "!";
 
 program
-    .version('0.0.1')
+    .version('0.1.0')
     .option('-m, --mode <mode>', 'The script running mode.  Batch or single file.')
     .option('-f, --filename <filename>', 'The desired file name including wildcard.  i.e. filename!')
     .option('-t, --targetfile <target>', 'If in single file mode, this flag must be set with the target file for the rename operation.')
