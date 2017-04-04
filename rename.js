@@ -2,15 +2,13 @@
 'use strict'
 console.log('Script is working');
 /**
- * Include Commander from npm to better handle input.  Standing on the shoulders of giants and all that.
+ * TODO: add proper error handling
  */
 const fs = require('fs');
 const path = require('path');
 const program = require('commander');
 const WORKINGDIR = process.cwd();
 const WILDCARD = "!";
-var args = process.argv.slice(2);
-var renameString = args[0];
 
 program
     .version('0.0.1')
@@ -20,7 +18,26 @@ program
     .parse(process.argv);
 
 (function () {
-    if (!validateInput(renameString)) {
+    if (program.mode) {
+        var mode = checkMode(program.mode);
+
+        if (mode == 'batch') {
+            batchMode();
+        }
+        if (mode == 'single') {
+            singleMode();
+        }
+    } else {
+        console.log('The mode flag is mandatory.');
+        process.exit(1);
+    }
+})();
+
+/**
+ * Function wrapper for the batch mode operation.
+ */
+function batchMode() {
+    if (!validateInput(program.filename)) {
         console.log("The input must contain the '!' character.");
         process.exit(1);
     }
@@ -34,9 +51,9 @@ program
                 process.exit(1);
             }
         })
-        .then(() => {
+        .then(function () {
             readDir()
-                .then(function(files) {
+                .then(function (files) {
                     for (let i = 0; i < files.length; i++) {
                         //exclude the script itself from the loop.  This could be done better.  It currently counts the script file itself if it exists in the working directory.  I should find a better way to do this.
                         if (files[i] === "rename.js") {
@@ -44,24 +61,53 @@ program
                         }
                         let fileNumber = i + 1;
                         let fileExtension = path.extname(files[i]);
-                        rename(files[i], renameString, fileNumber, fileExtension);
+                        rename(files[i], program.filename, fileNumber, fileExtension);
                     }
                     return;
                 })
-                .then(function() {
+                .then(function () {
                     console.log("Rename Done!");
                     process.exit();
                 })
         })
-})();
+}
 
+/**
+ * Function wrapper for single file mode.
+ */
+function singleMode() {
+    ask("Rename " + program.targetfile + " to " + program.filename + "? \n Y or N")
+        .then((responseData) => {
+            if (!responseData == "Y" || !responseData == "y" || !responseData == "N" || !responseData == "n") {
+                process.exit(1);
+            }
+            if (responseData == "N" || responseData == "n") {
+                process.exit(1);
+            }
+        })
+        .then(function () {
+            readDir()
+                .then(function (files) {
+                    if (files.includes(program.targetfile)) {
+                        var indexOfTargetFile = files.indexOf(program.targetfile);
+                        var fileExtension = path.extname(files[indexOfTargetFile]);
+                        rename(files[indexOfTargetFile], program.filename, "", fileExtension);
+                        return;
+                    }
+                })
+                .then(function () {
+                    console.log('Rename Done!');
+                    process.exit();
+                })
+        });
+}
 /**
  * Reads the directory where the script was executed and returns a promise that will resolve to an array of file names.
  * @returns {Promise} A promise that resolves to an array containing the directory contents.
  */
 function readDir() {
-    return new Promise(function(resolve, reject) {
-        fs.readdir(WORKINGDIR, function(err, files) {
+    return new Promise(function (resolve, reject) {
+        fs.readdir(WORKINGDIR, function (err, files) {
             if (err) {
                 reject(err);
             }
@@ -81,7 +127,7 @@ function readDir() {
 function rename(file, nmstring, fileNumber, extension) {
     let newFileNameWithoutExt = nmstring.replace(/\!/gi, fileNumber);
     let newFileNameWithExt = newFileNameWithoutExt + extension;
-    fs.rename(file, newFileNameWithExt, function(err) {
+    fs.rename(file, newFileNameWithExt, function (err) {
         if (err) {
             console.log(err);
         }
@@ -94,6 +140,10 @@ function rename(file, nmstring, fileNumber, extension) {
  * @returns {boolean} True if the wildcard string is present in the input string. False if not.
  */
 function validateInput(input) {
+    if(!input){
+        console.log('No file name given.');
+        process.exit(1);
+    }
     var input = input.includes(WILDCARD);
     return input;
 }
@@ -106,12 +156,34 @@ function validateInput(input) {
 function ask(question) {
     let stdIn = process.stdin;
     let stdOut = process.stdout;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         stdIn.resume();
         stdOut.write(question + "\n");
-        stdIn.once('data', (data) => {
+        stdIn.once('data', function (data) {
             data = data.toString().trim();
             resolve(data);
         })
     })
+}
+
+/**
+ * Checks which mode flag was set by the user.
+ * @param {string} mode 
+ * @returns {string} Returned string represents the run mode for the program.  Either batch or single file.  If an invalid run mode flag is set, the program exits with a logged error message.
+ */
+function checkMode(mode) {
+    let runMode;
+    switch (mode) {
+        case 'b':
+            runMode = 'batch';
+            break;
+        case 's':
+            runMode = 'single';
+            break;
+    }
+    if (!runMode) {
+        console.log('Error: invalid mode');
+        process.exit(1);
+    }
+    return runMode;
 }
