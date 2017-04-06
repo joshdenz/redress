@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 'use strict'
-console.log('Script is working');
-/**
- * TODO: add proper error handling
- */
+
 const fs = require('fs');
 const path = require('path');
 const program = require('commander');
 const WORKINGDIR = process.cwd();
-const WILDCARD = "!";
+const WILDCARD = '!';
 
 program
     .version('0.1.0')
@@ -18,6 +15,7 @@ program
     .parse(process.argv);
 
 (function () {
+    console.log(program.filename + '\n' + program.targetfile);
     if (program.mode) {
         var mode = checkMode(program.mode);
 
@@ -42,12 +40,12 @@ function batchMode() {
         process.exit(1);
     }
 
-    ask("Rename all files and folders in: " + WORKINGDIR + " ? \n Y or N")
+    ask('Rename all files and folders in: ' + WORKINGDIR + ' ? \n Y or N')
         .then(function(responseData) {
-            if (!responseData == "Y" || !responseData == "y" || !responseData == "N" || !responseData == "n") {
+            if (!responseData == 'Y' || !responseData == 'y' || !responseData == 'N' || !responseData == 'n') {
                 process.exit(1);
             }
-            if (responseData == "N" || responseData == "n") {
+            if (responseData == 'N' || responseData == 'n') {
                 process.exit(1);
             }
         })
@@ -56,7 +54,7 @@ function batchMode() {
                 .then(function (files) {
                     for (let i = 0; i < files.length; i++) {
                         //exclude the script itself from the loop.  This could be done better.  It currently counts the script file itself if it exists in the working directory.  I should find a better way to do this.
-                        if (files[i] === "rename.js") {
+                        if (files[i] === 'rename.js') {
                             continue;
                         }
                         let fileNumber = i + 1;
@@ -64,10 +62,13 @@ function batchMode() {
                         rename(files[i], program.filename, fileNumber, fileExtension);
                     }
                     return;
+                }, function(err){
+                    console.log(err);
+                    process.exit(1);
                 })
                 .then(function () {
-                    console.log("Rename Done!");
-                    process.exit();
+                    console.log('Rename Done!');
+                    process.exit(0);
                 })
         })
 }
@@ -76,12 +77,12 @@ function batchMode() {
  * Function wrapper for single file mode.
  */
 function singleMode() {
-    ask("Rename " + program.targetfile + " to " + program.filename + "? \n Y or N")
+    ask('Rename ' + program.targetfile + ' to ' + program.filename + '? \n Y or N')
         .then(function(responseData) {
-            if (!responseData == "Y" || !responseData == "y" || !responseData == "N" || !responseData == "n") {
+            if (!responseData == 'Y' || !responseData == 'y' || !responseData == 'N' || !responseData == 'n') {
                 process.exit(1);
             }
-            if (responseData == "N" || responseData == "n") {
+            if (responseData == 'N' || responseData == 'n') {
                 process.exit(1);
             }
         })
@@ -89,15 +90,18 @@ function singleMode() {
             readDir()
                 .then(function (files) {
                     if (files.includes(program.targetfile)) {
-                        var indexOfTargetFile = files.indexOf(program.targetfile);
-                        var fileExtension = path.extname(files[indexOfTargetFile]);
-                        rename(files[indexOfTargetFile], program.filename, "", fileExtension);
-                        return;
+                        let indexOfTargetFile = files.indexOf(program.targetfile);
+                        let newFileName = program.filename.replace(/\.[^/.]+$/, '');
+                        let fileExtension = path.extname(program.filename);
+                        rename(files[indexOfTargetFile], newFileName, '', fileExtension);
                     }
+                }, function(err){
+                    console.log(err);
+                    process.exit(1);
                 })
                 .then(function () {
                     console.log('Rename Done!');
-                    process.exit();
+                    process.exit(0);
                 })
         });
 }
@@ -111,7 +115,6 @@ function readDir() {
             if (err) {
                 reject(err);
             }
-
             resolve(files);
         })
     });
@@ -158,7 +161,7 @@ function ask(question) {
     let stdOut = process.stdout;
     return new Promise(function (resolve, reject) {
         stdIn.resume();
-        stdOut.write(question + "\n");
+        stdOut.write(question + '\n');
         stdIn.once('data', function (data) {
             data = data.toString().trim();
             resolve(data);
