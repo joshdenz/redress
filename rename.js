@@ -43,7 +43,7 @@ function batchMode() {
     }
 
     ask("Rename all files and folders in: " + WORKINGDIR + " ? \n Y or N")
-        .then((responseData) => {
+        .then(function(responseData) {
             if (!responseData == "Y" || !responseData == "y" || !responseData == "N" || !responseData == "n") {
                 process.exit(1);
             }
@@ -77,7 +77,7 @@ function batchMode() {
  */
 function singleMode() {
     ask("Rename " + program.targetfile + " to " + program.filename + "? \n Y or N")
-        .then((responseData) => {
+        .then(function(responseData) {
             if (!responseData == "Y" || !responseData == "y" || !responseData == "N" || !responseData == "n") {
                 process.exit(1);
             }
