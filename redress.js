@@ -15,7 +15,6 @@ program
     .parse(process.argv);
 
 (function () {
-    console.log(program.filename + '\n' + program.targetfile);
     if (program.mode) {
         var mode = checkMode(program.mode);
 
@@ -40,7 +39,7 @@ function batchMode() {
         process.exit(1);
     }
 
-    ask('Rename all files and folders in: ' + WORKINGDIR + ' ? \n Y or N')
+    ask('Rename all files and folders in: ' + WORKINGDIR + '? Y or N')
         .then(function(responseData) {
             if (!responseData == 'Y' || !responseData == 'y' || !responseData == 'N' || !responseData == 'n') {
                 process.exit(1);
@@ -77,7 +76,7 @@ function batchMode() {
  * Function wrapper for single file mode.
  */
 function singleMode() {
-    ask('Rename ' + program.targetfile + ' to ' + program.filename + '? \n Y or N')
+    ask('Rename ' + program.targetfile + ' to ' + program.filename + '? Y or N')
         .then(function(responseData) {
             if (!responseData == 'Y' || !responseData == 'y' || !responseData == 'N' || !responseData == 'n') {
                 process.exit(1);
@@ -147,8 +146,8 @@ function validateInput(input) {
         console.log('No file name given.');
         process.exit(1);
     }
-    var input = input.includes(WILDCARD);
-    return input;
+    let wildcardExists = input.includes(WILDCARD);
+    return wildcardExists;
 }
 
 /**

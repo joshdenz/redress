@@ -1,11 +1,16 @@
-# node-renamer-cli
+# redress
 
 A cli renaming tool written in node.  Why not?
 
 ## Installation
 
-TODO: write some proper instructions.
+To install:
+```
+npm install redress -g
+```
+This tool prefers the global flag.
 
 ## Usage 
 
-TODO: write usage instructions
+
+

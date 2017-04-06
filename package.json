@@ -1,10 +1,10 @@
 {
-  "name": "node-renamer-cli",
+  "name": "redress",
   "version": "0.1.0",
   "description": "Batch or single use renaming utility.  ",
   "preferGlobal": true,
   "bin": {
-    "nodenamer": "./rename.js"
+    "redress": "./redress.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
