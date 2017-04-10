@@ -1,6 +1,6 @@
 {
   "name": "redress",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Batch or single use renaming utility.  ",
   "preferGlobal": true,
   "bin": {
