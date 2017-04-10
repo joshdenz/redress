@@ -17,5 +17,6 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0"
-  }
+  },
+  "homepage": "https://github.com/joshdenz/redress"
 }
