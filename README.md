@@ -81,3 +81,9 @@ The following flags are supported by redress.
     file for renaming including the file extension."
     Example: -t example.txt
 ```
+
+## Notes
+
+Currently the tool does not ignore directories, and so will include them in the
+rename operation.  They will be included in the numbering sequence, and you 
+likely do not want that behaviour.  
