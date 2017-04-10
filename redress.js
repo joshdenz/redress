@@ -90,6 +90,7 @@ function singleMode() {
                 .then(function (files) {
                     if (files.includes(program.targetfile)) {
                         let indexOfTargetFile = files.indexOf(program.targetfile);
+                        //strips the file extension from the supplied filename
                         let newFileName = program.filename.replace(/\.[^/.]+$/, '');
                         let fileExtension = path.extname(program.filename);
                         rename(files[indexOfTargetFile], newFileName, '', fileExtension);
@@ -151,7 +152,7 @@ function validateInput(input) {
 }
 
 /**
- * Function to ask questions of the user.
+ * Function to ask questions of the user.  This is used for prompting the user before performing the final rename operation.
  * @param {string} question 
  * @returns {Promise} The promise resolves to the supplied input from the user when prompted.
  */
@@ -170,7 +171,7 @@ function ask(question) {
 
 /**
  * Checks which mode flag was set by the user.
- * @param {string} mode 
+ * @param {string} mode Mode can be "b" for batch mode, or "s" for single.
  * @returns {string} Returned string represents the run mode for the program.  Either batch or single file.  If an invalid run mode flag is set, the program exits with a logged error message.
  */
 function checkMode(mode) {
