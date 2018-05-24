@@ -1,28 +1,31 @@
 # redress
 
-A cli renaming tool written in node.  Why not?
+A cli renaming tool written in node. Why not?
 
 ## Installation
 
 To install:
-```
+
+```md
 npm install redress -g
 ```
+
 This tool prefers the global flag.
 
-## Usage 
+## Usage
 
 Redress commands consist of a mode flag and one or more file names.
 
-Redress includes a batch renaming mode and a single file renaming mode.  I am aware 
-that there are native ways to rename single files.  Use those if you want, 
+Redress includes a batch renaming mode and a single file renaming mode. I am aware
+that there are native ways to rename single files. Use those if you want,
 the single file mode was more of a tacked on addition.
 
 You include the "-m" flag along with either a "b" or "s" to specify the usage mode.
-```
+
+```md
 redress -m b
 
-or 
+or
 
 redress -m s
 ```
@@ -31,23 +34,28 @@ In either mode, you must run the command from the location of the file(s) you wi
 
 ### Batch Mode
 
-In batch mode you include the file name format you would like the files to be renamed as.  Include the wildcard character "!".
+In batch mode you include the file name format you would like the files to be renamed as. Include the wildcard character "!".
 
 Example:
 
 A directory containing files like so:
-```
+
+```md
 randomfile.jpg
 evenmorerandom.jpg
 124144123.jpg
 1023003010.jpg
 ```
+
 Could be renamed using redress by navigating to the directory and using the following command:
-```
+
+```md
 redress -m b -f JuneVacation!
 ```
+
 The result would be the following:
-```
+
+```md
 JuneVacation1.jpg
 JuneVacation2.jpg
 JuneVacation3.jpg
@@ -60,7 +68,7 @@ In single file mode, you include the target filename and the filename to rename 
 
 Example:
 
-```
+```md
 redress -m s -t targetFile.html -f newFileName.html
 ```
 
@@ -68,22 +76,16 @@ redress -m s -t targetFile.html -f newFileName.html
 
 The following flags are supported by redress.
 
+```md
+-m "This flag tells redress what mode you are using. Mandatory flag.
+Expects either "b" for batch mode, or "s" for single file mode."
+
+-f "This flag should be followed by the string you wish to rename the file(s).
+If in batch mode also include the wildcard character "!".
+If in single file mode, the filename must include a file extension."
+Example: -f example! in batch mode, or -f example.txt in single file mode.
+
+-t "This flag is only used in single file mode, and specifies the target
+file for renaming including the file extension."
+Example: -t example.txt
 ```
--m "This flag tells redress what mode you are using.  Mandatory flag.  
-    Expects either "b" for batch mode, or "s" for single file mode."
-
--f "This flag should be followed by the string you wish to rename the file(s).  
-    If in batch mode also include the wildcard character "!".  
-    If in single file mode, the filename must include a file extension."
-    Example: -f example! in batch mode, or -f example.txt in single file mode.
-
--t "This flag is only used in single file mode, and specifies the target 
-    file for renaming including the file extension."
-    Example: -t example.txt
-```
-
-## Notes
-
-Currently the tool does not ignore directories, and so will include them in the
-rename operation.  They will be included in the numbering sequence, and you 
-likely do not want that behaviour.  
