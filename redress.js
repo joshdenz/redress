@@ -8,7 +8,7 @@ const WORKINGDIR = process.cwd();
 const WILDCARD = '!';
 
 program
-  .version('1.0.0')
+  .version('2.0.0')
   .option(
     '-m, --mode <mode>',
     'The script running mode.  Batch or single file.'
