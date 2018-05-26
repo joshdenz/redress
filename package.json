@@ -1,6 +1,6 @@
 {
   "name": "redress",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Batch or single use renaming utility.  ",
   "preferGlobal": true,
   "bin": {
@@ -9,7 +9,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["rename", "batch"],
+  "keywords": [
+    "rename",
+    "batch"
+  ],
   "author": "Josh Denzau",
   "license": "ISC",
   "dependencies": {
